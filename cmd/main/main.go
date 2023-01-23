@@ -1,8 +1,8 @@
 package main
 
 import (
-	"learn/go-xorm/pkg/controllers"
 	"learn/go-xorm/pkg/dao"
+	"learn/go-xorm/pkg/routes"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,9 +14,10 @@ func main() {
 	}
 	defer dao.DB.Close() // program exit close db connection
 
+	// instanciate gin
 	r := gin.Default()
 
-	r.POST("/book/", controllers.CreateBook)
+	routes.RegisterBookStoreRoutes(r)
 
 	r.Run() // listen and serve on http://localhost:8080/
 }
