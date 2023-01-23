@@ -37,7 +37,7 @@ func GetBookByID(c *gin.Context) {
 	// could not query book with id, book could not be found
 	if !affected {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Record not found!",
+			"error": fmt.Sprintf("Record with id %v not found!", id),
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
