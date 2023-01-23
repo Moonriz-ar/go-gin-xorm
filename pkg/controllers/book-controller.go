@@ -9,6 +9,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetRecentBooks returns an array of 10 recently created books
+func GetRecentBooks(c *gin.Context) {
+	var books []models.Book
+	// query database
+	if err := dao.DB.Desc("created_at").Limit(10).Find(&books); nil != err {
+		c.JSON(http.StatusOK, gin.H{"error": err.Error()})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 200,
+			"msg":  "success",
+			"data": books,
+		})
+	}
+}
+
 // GetBookByID returns the book query by id
 func GetBookByID(c *gin.Context) {
 	book := new(models.Book)
