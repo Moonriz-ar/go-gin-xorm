@@ -48,6 +48,7 @@ func GetBookByID(c *gin.Context) {
 	}
 }
 
+// UpdateBookByID updated book by id. Only fields that are included in request are updated, others remain the same
 func UpdateBookByID(c *gin.Context) {
 	// parse data from request to book struct, bind JSON
 	var book models.Book
@@ -78,6 +79,7 @@ func UpdateBookByID(c *gin.Context) {
 	fmt.Println(book)
 }
 
+// DeleteBookByID deletes a book by ID
 func DeleteBookByID(c *gin.Context) {
 	book := new(models.Book)
 	// parse path param id
@@ -103,6 +105,7 @@ func DeleteBookByID(c *gin.Context) {
 
 // CreateBook creates a new book
 // Todo: how to return to user created book with correct id (autoincremented)? currently always returns 0
+// should query db to get created book in db?
 func CreateBook(c *gin.Context) {
 	// parse data from request to book struct, bind JSON
 	var book models.Book
