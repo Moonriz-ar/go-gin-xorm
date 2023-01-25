@@ -48,6 +48,36 @@ func GetBookByID(c *gin.Context) {
 	}
 }
 
+func UpdateBookByID(c *gin.Context) {
+	// parse data from request to book struct, bind JSON
+	var book models.Book
+	if err := c.BindJSON(&book); nil != err {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	// parse path param id
+	id := c.Param("id")
+	// query database
+	affected, err := dao.DB.ID(id).Update(book)
+	fmt.Println("affected update book by id", affected)
+	if nil != err {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	// if affected == 0, means there is no book with that id
+	if affected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Record with id %v not found!", id)})
+	}
+	// if affected == 1, means book has been updated
+	if affected == 1 {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 200,
+			"msg":  "success",
+			"data": book,
+		})
+	}
+	fmt.Println(book)
+}
+
 func DeleteBookByID(c *gin.Context) {
 	book := new(models.Book)
 	// parse path param id
@@ -60,7 +90,7 @@ func DeleteBookByID(c *gin.Context) {
 	fmt.Println("affected delete:", affected)
 	// if affected == 0, means there is no book with that id
 	if affected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Record with id %v not found!", id)})
 	}
 	// if affected == 1, means book with id has been deleted
 	if affected == 1 {

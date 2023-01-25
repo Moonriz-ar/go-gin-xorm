@@ -7,9 +7,9 @@ import (
 // Book has book title and author
 type Book struct {
 	Id        int64     `json:"id"`
-	Title     string    `json:"title"`
-	Author    string    `json:"author"`
-	Category  string    `json:"category"`
+	Title     string    `json:"title" xorm:"varchar(25) not null"`
+	Author    string    `json:"author" xorm:"varchar(25) not null"`
+	Category  string    `json:"category" xorm:"varchar(25) not null"`
 	CreatedAt time.Time `json:"createdAt" xorm:"created"`
 	Updated   time.Time `xorm:"updated"`
 	DeletedAt time.Time `xorm:"deleted"` // soft delete, shows delete time instead of really deleting
