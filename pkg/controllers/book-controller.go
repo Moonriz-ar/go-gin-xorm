@@ -76,8 +76,11 @@ func DeleteBookByID(c *gin.Context) {
 func CreateBook(c *gin.Context) {
 	// parse data from request to book struct, bind JSON
 	var book models.Book
-	c.BindJSON(&book)
-	fmt.Println(book)
+	if err := c.BindJSON(&book); nil != err {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	// save to database
 	affected, err := dao.DB.Insert(book)
 	fmt.Println("CreateBook affected:", affected, book.Id)
