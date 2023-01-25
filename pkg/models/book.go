@@ -12,6 +12,7 @@ type Book struct {
 	Category  string    `json:"category"`
 	CreatedAt time.Time `json:"createdAt" xorm:"created"`
 	Updated   time.Time `xorm:"updated"`
+	DeletedAt time.Time `xorm:"deleted"` // soft delete, shows delete time instead of really deleting
 }
 
 func (b *Book) TableName() string {

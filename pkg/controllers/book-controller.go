@@ -34,7 +34,7 @@ func GetBookByID(c *gin.Context) {
 	if nil != err {
 		c.JSON(http.StatusOK, gin.H{"error": err.Error()})
 	}
-	// could not query book with id, book could not be found
+	// if affected == false, could not query book with id, book could not be found
 	if !affected {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": fmt.Sprintf("Record with id %v not found!", id),
@@ -44,6 +44,29 @@ func GetBookByID(c *gin.Context) {
 			"code": 200,
 			"msg":  "success",
 			"data": book,
+		})
+	}
+}
+
+func DeleteBookByID(c *gin.Context) {
+	book := new(models.Book)
+	// parse path param id
+	id := c.Param("id")
+	// query database
+	affected, err := dao.DB.ID(id).Delete(book)
+	if nil != err {
+		c.JSON(http.StatusOK, gin.H{"error": err.Error()})
+	}
+	fmt.Println("affected delete:", affected)
+	// if affected == 0, means there is no book with that id
+	if affected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+	}
+	// if affected == 1, means book with id has been deleted
+	if affected == 1 {
+		c.JSON(http.StatusNoContent, gin.H{
+			"code": 204,
+			"msg":  "success",
 		})
 	}
 }
