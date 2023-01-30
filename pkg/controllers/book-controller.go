@@ -11,7 +11,7 @@ import (
 
 // GetRecentBooks returns an array of 10 recently created books
 func GetRecentBooks(c *gin.Context) {
-	var books []models.Book
+	books := []models.Book{}
 	// query database
 	if err := dao.DB.Desc("created_at").Limit(10).Find(&books); nil != err {
 		c.JSON(http.StatusOK, gin.H{"error": err.Error()})
@@ -51,7 +51,7 @@ func GetBookByID(c *gin.Context) {
 // UpdateBookByID updated book by id. Only fields that are included in request are updated, others remain the same
 func UpdateBookByID(c *gin.Context) {
 	// parse data from request to book struct, bind JSON
-	var book models.Book
+	book := new(models.Book)
 	if err := c.BindJSON(&book); nil != err {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -108,7 +108,7 @@ func DeleteBookByID(c *gin.Context) {
 // should query db to get created book in db?
 func CreateBook(c *gin.Context) {
 	// parse data from request to book struct, bind JSON
-	var book models.Book
+	book := new(models.Book)
 	if err := c.BindJSON(&book); nil != err {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -116,7 +116,7 @@ func CreateBook(c *gin.Context) {
 
 	// save to database
 	affected, err := dao.DB.Insert(book)
-	fmt.Println("CreateBook affected:", affected, book.Id)
+	fmt.Println("CreateBook affected:", affected, book, book.ID)
 	if nil != err {
 		c.JSON(http.StatusOK, gin.H{"error": err.Error()})
 	} else {

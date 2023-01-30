@@ -6,7 +6,7 @@ import (
 
 // Book has book title and author
 type Book struct {
-	Id        int64     `json:"id"`
+	ID        int64     `json:"id"`
 	Title     string    `json:"title" xorm:"varchar(25) not null"`
 	Author    string    `json:"author" xorm:"varchar(25) not null"`
 	Category  string    `json:"category" xorm:"varchar(25) not null"`
